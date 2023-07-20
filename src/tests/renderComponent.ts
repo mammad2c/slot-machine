@@ -2,6 +2,7 @@ import { render } from "@testing-library/vue";
 import type { RenderOptions, RenderResult } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { createVuetify } from "vuetify";
+import { createTestingPinia } from "@pinia/testing";
 import type { UserEvent } from "node_modules/@testing-library/user-event/dist/types/setup/setup";
 
 const renderComponent = (
@@ -13,7 +14,7 @@ const renderComponent = (
 
   const renderTools = render(component, {
     global: {
-      plugins: [vuetify],
+      plugins: [vuetify, createTestingPinia({ stubActions: false })],
     },
     ...renderOptions,
   });
