@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container fluid class="fill-height w-100 justify-center">
+      <v-container class="fill-height justify-center">
         <Welcome v-if="game.isNotStarted" />
       </v-container>
     </v-main>
