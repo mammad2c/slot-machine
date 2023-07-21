@@ -7,7 +7,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "format": "prettier ./**/*.{vue,js,jsx,cjs,mjs,ts,tsx,cts,mts,css,scss,md,json,html} --write ",
-    "prepare": "husky install",
+    "prepare": "node scripts/prepare.mjs",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "pre-commit": "lint-staged",
