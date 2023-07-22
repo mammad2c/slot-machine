@@ -31,7 +31,14 @@
           >Roll
         </v-btn>
       </div>
-      <v-btn variant="outlined" color="error" @click="cashOut">
+      <v-btn
+        variant="outlined"
+        color="error"
+        @click="cashOut"
+        @mouseover="state.hoverOnCashOut = true"
+        @mouseleave="state.hoverOnCashOut = false"
+        :class="`slot-machine__cash-out-${state.cashOutMoveDirection}`"
+      >
         Cash out
       </v-btn>
     </div>
@@ -92,6 +99,8 @@ interface Props {
 interface State {
   credit: number;
   displayShapes: DisplayShapes;
+  hoverOnCashOut: boolean;
+  cashOutMoveDirection: string | null;
 }
 
 const gameStore = useGameStore();
@@ -116,6 +125,8 @@ const state = reactive<State>({
     },
     () => props.initialDisplayShape,
   ),
+  hoverOnCashOut: false,
+  cashOutMoveDirection: null,
 });
 
 const shapesIncludedForRollingLength = computed(
@@ -221,6 +232,29 @@ function cashOut() {
   gameStore.resetGame();
 }
 
+function onMouseOverCashOut() {
+  const shouldMove = Math.random() <= 0.5;
+  // const shouldDisableClick = Math.random() <= 0.4;
+
+  if (shouldMove) {
+    const directions = ["right", "left", "up", "down"];
+    const directionIndex = Math.floor(Math.random() * 5);
+    state.cashOutMoveDirection = directions[directionIndex];
+  }
+}
+
+let mouseLeaveCashOutInterval: null | ReturnType<typeof setTimeout> = null;
+
+function onMouseLeaveCashOut() {
+  if (mouseLeaveCashOutInterval) {
+    clearTimeout(mouseLeaveCashOutInterval);
+  }
+
+  mouseLeaveCashOutInterval = setTimeout(() => {
+    state.cashOutMoveDirection = null;
+  }, 3000);
+}
+
 onMounted(() => {
   if (isGameFinished.value) {
     gameStore.finishGame();
@@ -232,6 +266,17 @@ watch(isGameFinished, (value) => {
     gameStore.finishGame();
   }
 });
+
+watch(
+  () => state.hoverOnCashOut,
+  (value) => {
+    if (value) {
+      onMouseOverCashOut();
+    } else {
+      onMouseLeaveCashOut();
+    }
+  },
+);
 </script>
 
 <style lang="scss" scoped>
@@ -250,6 +295,22 @@ watch(isGameFinished, (value) => {
     background-size: 30%;
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  &__cash-out-right {
+    transform: translateX(300px);
+  }
+
+  &__cash-out-left {
+    transform: translateX(-300px);
+  }
+
+  &__cash-out-up {
+    transform: translateY(-300px);
+  }
+
+  &__cash-out-down {
+    transform: translateY(300px);
   }
 }
 </style>
