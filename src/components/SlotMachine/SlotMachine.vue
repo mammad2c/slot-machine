@@ -55,6 +55,9 @@ defineOptions({
 });
 
 const emit = defineEmits<{
+  /**
+   * We use this event to understand that we need to cheat. Useful for testing
+   */
   onCheatRequired: [];
 }>();
 
@@ -127,10 +130,16 @@ const isGameFinished = computed(
   () => (state.credit <= 0 || gameStore.isFinished) && !isRolling.value,
 );
 
+/**
+ * Get random shape index
+ */
 function getRandomShapeIndex() {
   return Math.floor(Math.random() * shapesIncludedForRollingLength.value);
 }
 
+/**
+ * Get new display shapes randomly
+ */
 function getNewDisplayShapes() {
   const newDisplayShape: DisplayShapes = [];
 
@@ -199,9 +208,7 @@ function roll() {
           if (isWinner) {
             state.credit += shapes[firstShape.shape].point;
           } else {
-            if (!isWinner) {
-              state.credit--;
-            }
+            state.credit--;
           }
         }
       },
