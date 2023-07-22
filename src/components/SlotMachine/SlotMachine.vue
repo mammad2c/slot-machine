@@ -54,6 +54,10 @@ defineOptions({
   name: "SlotMachine",
 });
 
+const emit = defineEmits<{
+  onCheatRequired: [];
+}>();
+
 type DisplayShapes = Array<{
   shape: keyof typeof shapes;
   isRolling: boolean;
@@ -127,6 +131,31 @@ function getRandomShapeIndex() {
   return Math.floor(Math.random() * shapesIncludedForRollingLength.value);
 }
 
+function getNewDisplayShapes() {
+  const newDisplayShape: DisplayShapes = [];
+
+  for (let i = 0; i < props.numberOfShapes; i++) {
+    const randomShapeIndex = getRandomShapeIndex();
+
+    newDisplayShape.push({
+      shape: props.shapesIncludedForRolling[randomShapeIndex],
+      isRolling: false,
+    });
+  }
+
+  return newDisplayShape;
+}
+
+function checkIsWinner(displayShapes: DisplayShapes) {
+  const firstShape = displayShapes[0];
+
+  const isWinner = displayShapes.every(
+    (displayShape) => firstShape.shape === displayShape.shape,
+  );
+
+  return isWinner;
+}
+
 function roll() {
   if (state.credit === 0) {
     return;
@@ -139,22 +168,29 @@ function roll() {
     isRolling: true,
   }));
 
-  const newDisplayShape: DisplayShapes = [];
+  let newDisplayShape = getNewDisplayShapes();
 
-  for (let i = 0; i < props.numberOfShapes; i++) {
-    const randomShapeIndex = getRandomShapeIndex();
+  let isWinner = checkIsWinner(newDisplayShape);
 
-    newDisplayShape.push({
-      shape: props.shapesIncludedForRolling[randomShapeIndex],
-      isRolling: false,
-    });
+  if (isWinner && state.credit >= 40) {
+    emit("onCheatRequired");
+    if (state.credit <= 60) {
+      const shouldReroll = Math.random() <= 0.3;
+
+      if (shouldReroll) {
+        newDisplayShape = getNewDisplayShapes();
+        isWinner = checkIsWinner(newDisplayShape);
+      }
+    } else if (state.credit > 60) {
+      const shouldReroll = Math.random() <= 0.6;
+      if (shouldReroll) {
+        newDisplayShape = getNewDisplayShapes();
+        isWinner = checkIsWinner(newDisplayShape);
+      }
+    }
   }
 
   const firstShape = newDisplayShape[0];
-
-  const isWinner = newDisplayShape.every(
-    (displayShape) => firstShape.shape === displayShape.shape,
-  );
 
   for (let i = 0; i < props.numberOfShapes; i++) {
     setTimeout(

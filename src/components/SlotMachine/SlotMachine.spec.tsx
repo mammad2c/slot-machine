@@ -59,4 +59,22 @@ describe(SlotMachine.name, () => {
     expect(queryByText(/credit/i)).toHaveTextContent("0");
     expect(queryByText(/your chances has been fulfilled/i)).toBeInTheDocument();
   });
+
+  it("should re roll if credit is between 40 and 60 or above 60 and user is won the round", async () => {
+    const onOnCheatRequired = vi.fn();
+    const { queryByText, user } = renderComponent(
+      <SlotMachine
+        rollingTimeout={0}
+        initialCredit={50}
+        onOnCheatRequired={onOnCheatRequired}
+        shapesIncludedForRolling={["c"]}
+      />,
+    );
+
+    const rollBtn = getRollBtn(queryByText)!;
+
+    await user.click(rollBtn);
+
+    expect(onOnCheatRequired).toBeCalled();
+  });
 });
