@@ -11,16 +11,16 @@ const defaultState: State = {
 
 export const useGameStore = defineStore("game", {
   state: () => {
-    return defaultState;
+    return { ...defaultState };
   },
   getters: {
-    isPlaying() {
+    isPlaying(): boolean {
       return this.status === "playing";
     },
-    isFinished() {
+    isFinished(): boolean {
       return this.status === "finished";
     },
-    isNotStarted() {
+    isNotStarted(): boolean {
       return this.status === "not-started";
     },
   },
@@ -31,8 +31,8 @@ export const useGameStore = defineStore("game", {
     finishGame() {
       this.status = "finished";
     },
-    reset() {
-      return defaultState;
+    resetGame() {
+      this.status = "not-started";
     },
     setStatus(status: State["status"]) {
       this.status = status;

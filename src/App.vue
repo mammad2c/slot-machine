@@ -3,7 +3,7 @@
     <v-main>
       <v-container class="fill-height justify-center">
         <Welcome v-if="game.isNotStarted" />
-        <SlotMachine v-if="game.isPlaying" />
+        <SlotMachine v-if="!game.isNotStarted" />
       </v-container>
     </v-main>
   </v-app>
