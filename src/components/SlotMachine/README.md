@@ -1,5 +1,7 @@
 # SlotMachine
 
+> This component is the main gameplay
+
 ## Props
 
 | Prop name                | Description                                                                                                              | Type                | Values | Default                                                                                     |

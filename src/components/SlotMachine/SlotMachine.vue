@@ -47,6 +47,9 @@ import { reactive, computed, onMounted, watch } from "vue";
 import { shapes } from "./config";
 import { useGameStore } from "@/stores";
 
+/**
+ * This component is the main gameplay
+ */
 defineOptions({
   name: "SlotMachine",
 });
