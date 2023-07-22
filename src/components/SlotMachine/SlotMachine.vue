@@ -90,7 +90,7 @@ interface State {
 const gameStore = useGameStore();
 
 const props = withDefaults(defineProps<Props>(), {
-  initialCredit: 1,
+  initialCredit: 10,
   initialDisplayShape: () => ({
     shape: "c",
     isRolling: false,
