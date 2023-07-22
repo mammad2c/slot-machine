@@ -37,7 +37,7 @@
     </div>
 
     <div v-if="isGameFinished">
-      <v-alert color="warning"> Your chances has been fulfilled </v-alert>
+      <v-alert color="warning"> Game over </v-alert>
     </div>
   </div>
 </template>
@@ -188,10 +188,6 @@ function roll() {
     }
   }
 
-  if (!isWinner) {
-    state.credit--;
-  }
-
   const firstShape = newDisplayShape[0];
 
   for (let i = 0; i < props.numberOfShapes; i++) {
@@ -199,8 +195,14 @@ function roll() {
       () => {
         state.displayShapes[i] = newDisplayShape[i];
 
-        if (isWinner && i + 1 === props.numberOfShapes) {
-          state.credit += shapes[firstShape.shape].point;
+        if (i + 1 == props.numberOfShapes) {
+          if (isWinner) {
+            state.credit += shapes[firstShape.shape].point;
+          } else {
+            if (!isWinner) {
+              state.credit--;
+            }
+          }
         }
       },
       (i + 1) * props.rollingTimeout,

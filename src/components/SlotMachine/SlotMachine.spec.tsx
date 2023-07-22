@@ -1,6 +1,7 @@
 import { renderComponent } from "@/tests/renderComponent";
 import SlotMachine from "./SlotMachine.vue";
 import { shapes } from "./config";
+import { useGameStore } from "@/stores";
 
 function getRollBtn(
   queryByText: ReturnType<typeof renderComponent>["queryByText"],
@@ -45,6 +46,8 @@ describe(SlotMachine.name, () => {
       <SlotMachine rollingTimeout={0} initialCredit={0} />,
     );
 
+    const gameStore = useGameStore();
+
     const rollBtn = getRollBtn(queryByText)!;
 
     await user.click(rollBtn);
@@ -55,7 +58,8 @@ describe(SlotMachine.name, () => {
     vi.restoreAllMocks();
 
     expect(queryByText(/credit/i)).toHaveTextContent("0");
-    expect(queryByText(/your chances has been fulfilled/i)).toBeInTheDocument();
+    expect(queryByText(/game over/i)).toBeInTheDocument();
+    expect(gameStore.status).toBe("finished");
   });
 
   it("should re roll if credit is between 40 and 60 or above 60 and user is won the round", async () => {
