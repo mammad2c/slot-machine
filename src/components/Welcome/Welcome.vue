@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="outlined" elevation="0" class="w-75 pa-4">
+  <v-card class="px-4 py-10">
     <v-card-item class="text-center mb-6">
       <h3>Welcome to Slot Machine</h3>
     </v-card-item>
