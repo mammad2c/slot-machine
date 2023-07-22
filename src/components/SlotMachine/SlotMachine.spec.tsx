@@ -36,9 +36,7 @@ describe(SlotMachine.name, () => {
       vi.useRealTimers();
       vi.restoreAllMocks();
 
-      expect(queryByText(/credit/i)).toHaveTextContent(
-        `${value.point + 10 - 1}`,
-      );
+      expect(queryByText(/credit/i)).toHaveTextContent(`${value.point + 10}`);
     });
   }
 

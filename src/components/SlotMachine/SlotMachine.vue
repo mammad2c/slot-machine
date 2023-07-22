@@ -161,8 +161,6 @@ function roll() {
     return;
   }
 
-  state.credit--;
-
   state.displayShapes = state.displayShapes.map((displayShape) => ({
     ...displayShape,
     isRolling: true,
@@ -188,6 +186,10 @@ function roll() {
         isWinner = checkIsWinner(newDisplayShape);
       }
     }
+  }
+
+  if (!isWinner) {
+    state.credit--;
   }
 
   const firstShape = newDisplayShape[0];
