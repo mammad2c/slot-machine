@@ -1,14 +1,22 @@
-# default
+# Slot Machine
+
+Technologies:
+
+- TypeScript
+- Vue 3
+- Vuetify
+- Pinia
+- Vitest
+- Vue Testing Library
 
 ## Project setup
 
+Requires:
+
+- Node 16.20 or above
+- PNPM 8 or above
+
 ```
-# yarn
-yarn
-
-# npm
-npm install
-
 # pnpm
 pnpm install
 ```
@@ -16,12 +24,6 @@ pnpm install
 ### Compiles and hot-reloads for development
 
 ```
-# yarn
-yarn dev
-
-# npm
-npm run dev
-
 # pnpm
 pnpm dev
 ```
@@ -29,12 +31,6 @@ pnpm dev
 ### Compiles and minifies for production
 
 ```
-# yarn
-yarn build
-
-# npm
-npm run build
-
 # pnpm
 pnpm build
 ```

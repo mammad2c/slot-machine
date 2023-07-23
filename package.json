@@ -1,6 +1,12 @@
 {
   "name": "slot-machine",
   "version": "0.0.0",
+  "engines": {
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "pnpm": ">=8.x.x",
+    "node": ">=16.20.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
