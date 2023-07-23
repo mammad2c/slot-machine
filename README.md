@@ -8,6 +8,7 @@ Technologies:
 - Pinia
 - Vitest
 - Vue Testing Library
+- vue-docgen-cli
 
 ## Project setup
 
@@ -34,6 +35,19 @@ pnpm dev
 # pnpm
 pnpm build
 ```
+
+### Tests
+
+```
+pnpm test:unit
+
+# in watch mode
+pnpm test:unit:watch
+```
+
+---
+
+You can see other scripts inside the `package.json`.
 
 ### Customize configuration
 
