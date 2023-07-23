@@ -2,6 +2,7 @@ import { renderComponent } from "@/tests/renderComponent";
 import SlotMachine from "./SlotMachine.vue";
 import { shapes } from "./config";
 import { useGameStore } from "@/stores";
+import { nextTick } from "vue";
 
 function getRollBtn(
   queryByText: ReturnType<typeof renderComponent>["queryByText"],
@@ -78,5 +79,67 @@ describe(SlotMachine.name, () => {
     await user.click(rollBtn);
 
     expect(onOnCheatRequired).toBeCalled();
+  });
+
+  it("should move the cash out by hover on it based on the chance", async () => {
+    const { queryByTestId, queryByText, user } = renderComponent(
+      <SlotMachine cashOutHoverMoveDirectionChance={1} />,
+    );
+
+    const cashOutBtn = queryByText(/cash out/i)!;
+
+    await user.hover(cashOutBtn);
+
+    const cashOutWrapper = queryByTestId("slot-machine__cash-out")!;
+
+    expect(cashOutWrapper).not.toHaveClass("slot-machine__cash-out--null");
+  });
+
+  it("should disable the cash out by hover on it based on the chance", async () => {
+    const { queryByText, user } = renderComponent(
+      <SlotMachine
+        cashOutHoverDisableClickChance={0}
+        cashOutHoverMoveDirectionChance={0}
+      />,
+    );
+
+    const gameStore = useGameStore();
+
+    gameStore.startGame();
+
+    const cashOutBtn = queryByText(/cash out/i)!;
+
+    await user.hover(cashOutBtn);
+
+    await user.click(cashOutBtn);
+
+    expect(gameStore.status).toBe("not-started");
+  });
+
+  it("should restore cash out hover effects if game is finished", async () => {
+    const { queryByText, user, queryByTestId } = renderComponent(
+      <SlotMachine
+        cashOutHoverDisableClickChance={1}
+        cashOutHoverMoveDirectionChance={1}
+      />,
+    );
+
+    const gameStore = useGameStore();
+
+    const cashOutBtn = queryByText(/cash out/i)!;
+
+    await user.hover(cashOutBtn);
+
+    const cashOutWrapper = queryByTestId("slot-machine__cash-out")!;
+
+    expect(cashOutWrapper).not.toHaveClass("slot-machine__cash-out--null");
+
+    gameStore.finishGame();
+
+    await nextTick();
+
+    expect(queryByText(/game over/i)).toBeInTheDocument();
+
+    expect(cashOutWrapper).toHaveClass("slot-machine__cash-out--null");
   });
 });

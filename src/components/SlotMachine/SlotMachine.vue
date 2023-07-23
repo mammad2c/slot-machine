@@ -28,13 +28,15 @@
           @click="roll"
           :loading="isRolling"
           :disabled="isGameFinished"
-          >Roll
+        >
+          Roll
         </v-btn>
       </div>
       <div
         :class="`d-inline-block slot-machine__cash-out slot-machine__cash-out--${state.cashOutMoveDirection}`"
         @mouseover="onMouseOverCashOut"
         @mouseleave="onMouseLeaveCashOut"
+        data-testid="slot-machine__cash-out"
       >
         <v-btn
           variant="outlined"
@@ -98,6 +100,14 @@ interface Props {
    * The timer that how much rolling should take long. It is based on milliseconds and will increased based on numberOfShapes
    */
   rollingTimeout?: number;
+  /**
+   * The chance of cash out move on hover. Should be between 0 and 1.
+   */
+  cashOutHoverMoveDirectionChance?: number;
+  /**
+   * The chance of cash out disable click on hover. Should be between 0 and 1.
+   */
+  cashOutHoverDisableClickChance?: number;
 }
 
 interface State {
@@ -119,6 +129,8 @@ const props = withDefaults(defineProps<Props>(), {
   shapesIncludedForRolling: () =>
     Object.keys(shapes) as unknown as Array<DisplayShapes[number]["shape"]>,
   rollingTimeout: 1000,
+  cashOutHoverMoveDirectionChance: 0.5,
+  cashOutHoverDisableClickChance: 0.4,
 });
 
 const state = reactive<State>({
@@ -250,8 +262,12 @@ function onMouseLeaveCashOut() {
 }
 
 function onMouseOverCashOut() {
-  const shouldMove = Math.random() <= 0.5;
-  const shouldDisableClick = Math.random() <= 0.4;
+  const shouldMove =
+    Math.random() <= props.cashOutHoverMoveDirectionChance &&
+    !isGameFinished.value;
+  const shouldDisableClick =
+    Math.random() <= props.cashOutHoverDisableClickChance &&
+    !isGameFinished.value;
 
   if (shouldMove) {
     const directions = ["right", "left", "up", "down"];
@@ -271,12 +287,21 @@ function onMouseOverCashOut() {
 onMounted(() => {
   if (isGameFinished.value) {
     gameStore.finishGame();
+  } else {
+    gameStore.startGame();
   }
+
+  // setTimeout(() => {
+  //   gameStore.finishGame();
+  // }, 2000);
 });
 
 watch(isGameFinished, (value) => {
   if (value) {
+    console.log("mmmmmmmmmmmmmmm");
     gameStore.finishGame();
+    state.cashOutDisableClick = false;
+    state.cashOutMoveDirection = null;
   }
 });
 </script>
