@@ -298,7 +298,6 @@ onMounted(() => {
 
 watch(isGameFinished, (value) => {
   if (value) {
-    console.log("mmmmmmmmmmmmmmm");
     gameStore.finishGame();
     state.cashOutDisableClick = false;
     state.cashOutMoveDirection = null;
