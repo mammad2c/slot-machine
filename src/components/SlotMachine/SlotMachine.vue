@@ -290,10 +290,6 @@ onMounted(() => {
   } else {
     gameStore.startGame();
   }
-
-  // setTimeout(() => {
-  //   gameStore.finishGame();
-  // }, 2000);
 });
 
 watch(isGameFinished, (value) => {
