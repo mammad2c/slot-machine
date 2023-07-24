@@ -9,7 +9,7 @@ if (!ci.isCI) {
 }
 
 if (!os.type().toLowerCase().includes("windows") && !ci.isCI) {
-  console.log("Enabled husky on non Windows systems");
+  console.log("Enabling husky on non Windows systems");
   exec("chmod ug+x .husky/*", (_, stdout) => {
     console.log(stdout);
   });
